@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="Base32 Test Suite">
+            <directory>tests/Base/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/Base32/</directory>
+        </whitelist>
+    </filter>
+</phpunit>
