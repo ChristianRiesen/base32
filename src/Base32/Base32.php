@@ -1,5 +1,5 @@
 <?php
-namespace Otp;
+namespace Base32;
 
 /**
  * Base32 encoder and decoder

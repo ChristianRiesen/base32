@@ -3,7 +3,7 @@
 <phpunit colors="true">
     <testsuites>
         <testsuite name="Base32 Test Suite">
-            <directory>tests/Base/</directory>
+            <directory>tests/Base32/</directory>
         </testsuite>
     </testsuites>
 
