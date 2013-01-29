@@ -1,7 +1,7 @@
 {
-    "name": "ChristianRiesen/base32",
+    "name": "christian-riesen/base32",
     "type": "library",
-    "description": "Base32 encoder/decoder according to RFC 4648",
+    "description": "Base32 encoder/decoder, unit tested, according to RFC 4648",
     "keywords": ["base32","encode","decode","rfc4648"],
     "homepage": "https://github.com/ChristianRiesen/base32",
     "license": "MIT",
