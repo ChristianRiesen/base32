@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="christianriesen-base32" default="build">
- <target name="build" depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb"/>
+ <target name="build" depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit,phpcb"/>
 
  <target name="build-parallel" depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
@@ -22,6 +22,14 @@
   <delete dir="${basedir}/build/coverage"/>
   <delete dir="${basedir}/build/logs"/>
   <delete dir="${basedir}/build/pdepend"/>
+  <exec executable="bash">
+   <arg value="-c" />
+   <arg value="curl -s http://getcomposer.org/installer | php" />
+  </exec>
+  <exec executable="php">
+   <arg value="composer.phar" />
+   <arg value="install" />
+  </exec>
  </target>
 
  <target name="prepare" depends="clean" description="Prepare for build">
