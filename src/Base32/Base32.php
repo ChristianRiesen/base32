@@ -185,7 +185,6 @@ class Base32
 		
 		// Remove anything that is not base32 alphabet
 		$pattern = '/[^A-Z2-7]/';
-		$replacement = '';
 		
 		$base32String = preg_replace($pattern, '', $base32String);
 		
@@ -215,7 +214,7 @@ class Base32
 		foreach ($binaryArray as $bin) {
 			// Pad each value to 8 bits
 			$bin = str_pad($bin, 8, 0, STR_PAD_RIGHT);
-			// Convert binary strings to ascii
+			// Convert binary strings to ASCII
 			$realString .= chr(bindec($bin));
 		}
 		
