@@ -1,8 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../src/Base32/Base32.php';
-
-require_once 'PHPUnit/Framework/TestCase.php';
+namespace Base32;
 
 use Base32\Base32;
 
