@@ -57,3 +57,4 @@ Acknowledgements
 ----------------
 
 Base32 is mostly based on the work of https://github.com/NTICompass/PHP-Base32
+
