@@ -176,10 +176,6 @@ class Base32
 	 */
     public static function decode($base32String)
     {
-        if (strlen($base32String) == 0) {
-            // Gives an empty string
-            return '';
-        }
 
         // Only work in upper cases
         $base32String = strtoupper($base32String);
@@ -187,7 +183,12 @@ class Base32
         // Remove anything that is not base32 alphabet
         $pattern = '/[^A-Z2-7]/';
 
-		$base32String = preg_replace($pattern, '', $base32String);
+        $base32String = preg_replace($pattern, '', $base32String);
+
+        if (strlen($base32String) == 0) {
+            // Gives an empty string
+            return '';
+        }
 
         $base32Array = str_split($base32String);
 
