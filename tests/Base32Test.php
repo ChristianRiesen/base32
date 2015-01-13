@@ -27,6 +27,9 @@ class Base32Test extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('foob',   Base32::decode('MZXW6YQ='));
 		$this->assertEquals('fooba',  Base32::decode('MZXW6YTB'));
 		$this->assertEquals('foobar', Base32::decode('MZXW6YTBOI======'));
+
+		// Decoding a string made up entirely of invalid characters
+		$this->assertEquals('', Base32::decode('8908908908908908'));
 	}
 	
 	/**
