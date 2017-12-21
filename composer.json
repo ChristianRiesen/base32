@@ -26,6 +26,11 @@
             "Base32\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Base32\\": "tests/"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.1.x-dev"
