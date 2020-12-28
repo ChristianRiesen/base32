@@ -81,7 +81,7 @@ class Base32
 
             if (!is_null($bin)) {
                 // Pad the binary strings
-                $bin = str_pad($bin, 5, 0, STR_PAD_RIGHT);
+                $bin = str_pad($bin, 5, "0", STR_PAD_RIGHT);
                 $char = bindec($bin);
             }
 
@@ -136,7 +136,7 @@ class Base32
 
         foreach ($binaryArray as $bin) {
             // Pad each value to 8 bits
-            $bin = str_pad($bin, 8, 0, STR_PAD_RIGHT);
+            $bin = str_pad($bin, 8, "0", STR_PAD_RIGHT);
             // Convert binary strings to ASCII
             $realString .= chr(bindec($bin));
         }
