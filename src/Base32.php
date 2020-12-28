@@ -36,8 +36,8 @@ class Base32
     {
         $binaryString = chunk_split($binaryString, $bits, ' ');
 
-        if (substr($binaryString, (strlen($binaryString)) - 1)  == ' ') {
-            $binaryString = substr($binaryString, 0, strlen($binaryString)-1);
+        if (substr($binaryString, strlen($binaryString) - 1) === ' ') {
+            $binaryString = substr($binaryString, 0, -1);
         }
 
         return explode(' ', $binaryString);
@@ -51,7 +51,7 @@ class Base32
      */
     public static function encode($string)
     {
-        if (strlen($string) == 0) {
+        if ($string === '') {
             // Gives an empty string
 
             return '';
@@ -108,7 +108,7 @@ class Base32
 
         $base32String = preg_replace($pattern, '', $base32String);
 
-        if (strlen($base32String) == 0) {
+        if ($base32String === '') {
             // Gives an empty string
             return '';
         }
@@ -127,7 +127,7 @@ class Base32
         }
 
         while (strlen($string) %8 !== 0) {
-            $string = substr($string, 0, strlen($string)-1);
+            $string = substr($string, 0, -1);
         }
 
         $binaryArray = self::chunk($string, 8);
