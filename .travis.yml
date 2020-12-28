@@ -21,9 +21,6 @@ matrix:
         - nightly
 
 before_script:
-    - composer install
-
-before_script:
     - composer install --no-interaction
     - mkdir -p build/logs
 
