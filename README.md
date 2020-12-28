@@ -7,6 +7,16 @@ Base32 Encoder/Decoder for PHP according to [RFC 4648](https://tools.ietf.org/ht
 
 [![Latest Stable Version](https://poser.pugx.org/christian-riesen/base32/v/stable.png)](https://packagist.org/packages/christian-riesen/base32) [![Total Downloads](https://poser.pugx.org/christian-riesen/base32/downloads.png)](https://packagist.org/packages/christian-riesen/base32) [![Latest Unstable Version](https://poser.pugx.org/christian-riesen/base32/v/unstable.png)](https://packagist.org/packages/christian-riesen/base32) [![License](https://poser.pugx.org/christian-riesen/base32/license.png)](https://packagist.org/packages/christian-riesen/base32)
 
+
+Installation
+-----
+
+Use composer:
+
+```bash
+composer require christian-riesen/base32
+```
+
 Usage
 -----
 
@@ -37,9 +47,9 @@ Have a RFC compliant Base32 encoder and decoder. The implementation could be imp
 Requirements
 ------------
 
-PHP 7.4+
+Works on PHP 7.2 and later, including PHP 8.0.
 
-Tests run on PHPUnit 9.5, with PHP 7.4 and later.
+Tests run on PHPUnit 9.5, with PHP 7.3 and later. For PHP 7.2, tests use an older PHPUnit version.
 
 Author
 ------

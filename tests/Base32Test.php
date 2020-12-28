@@ -8,12 +8,12 @@ use Base32\Base32;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Base32 test case.
+ * @coversDefaultClass \Base32\Base32
  */
 class Base32Test extends TestCase
 {
     /**
-     * Vectors from RFC with cleartext => base32 pairs
+     * Vectors from RFC with cleartext => base32 pairs.
      *
      * @var array<string,string>
      */
@@ -26,6 +26,9 @@ class Base32Test extends TestCase
         'RFC Vector 6' => ['foobar', 'MZXW6YTBOI======'],
     ];
 
+    /**
+     * @return array<string, array>
+     */
     public function decodeDataProvider(): array
     {
         $encodeData = [
@@ -36,6 +39,9 @@ class Base32Test extends TestCase
         return \array_merge($encodeData, self::RFC_VECTORS);
     }
 
+    /**
+     * @return array<string, array>
+     */
     public function encodeDataProvider(): array
     {
         $encodeData = [
@@ -45,22 +51,21 @@ class Base32Test extends TestCase
         return \array_merge($encodeData, self::RFC_VECTORS);
     }
 
-	/**
-	 * Test vectors according to RFC 4648
-	 * http://www.ietf.org/rfc/rfc4648.txt
-     *
+    /**
      * @dataProvider decodeDataProvider
-	 */
-	public function testDecode(string $clear, string $base32): void
-	{
-		$this->assertEquals($clear, Base32::decode($base32));
-	}
+     * @covers ::decode
+     */
+    public function testDecode(string $clear, string $base32): void
+    {
+        $this->assertEquals($clear, Base32::decode($base32));
+    }
 
     /**
      * @dataProvider encodeDataProvider
+     * @covers ::encode
      */
-	public function testEncode(string $clear, string $base32): void
-	{
+    public function testEncode(string $clear, string $base32): void
+    {
         $this->assertEquals($base32, Base32::encode($clear));
-	}
+    }
 }

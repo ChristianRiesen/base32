@@ -18,9 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: php-actions/composer@dynamic-docker
+      - name: Composer
+        uses: php-actions/composer@v5
+        with:
+          php_version: 8.0
+          composer_version: 2
       - name: PHPStan
         uses: php-actions/phpstan@v2
+        with:
+          php_version: 8.0
 
   phpunit:
     name: 'PHPUnit'
@@ -29,18 +35,27 @@ jobs:
       # Making sure all versions get tested even if one fails
       fail-fast: false
       matrix:
+        phpunit-version:
+          - '9.5.0'
         php-version:
+          - '7.3'
           - '7.4'
           - '8.0'
+        include:
+          - phpunit-version: '8.5.13'
+            php-version: '7.2'
 
     steps:
       - uses: actions/checkout@v2
-      - uses: php-actions/composer@dynamic-docker
+      - name: Composer
+        uses: php-actions/composer@v5
+        with:
+          php_version: ${{ matrix.php-version }}
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v2
         with:
-          version: 9.5.0
+          version: ${{ matrix.phpunit-version }}
           php_version: ${{ matrix.php-version }}
           #bootstrap: vendor/autoload.php
           #configuration: test/phpunit.xml
