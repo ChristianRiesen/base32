@@ -1,0 +1,47 @@
+name: CI
+
+on: [push]
+
+jobs:
+  php-cs-fixer:
+    name: PHP-CS-Fixer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: PHP-CS-Fixer
+        uses: docker://oskarstark/php-cs-fixer-ga
+        with:
+          args: --diff --dry-run
+
+  phpstan:
+    name: 'PHPStan'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@dynamic-docker
+      - name: PHPStan
+        uses: php-actions/phpstan@v2
+
+  phpunit:
+    name: 'PHPUnit'
+    runs-on: ubuntu-latest
+    strategy:
+      # Making sure all versions get tested even if one fails
+      fail-fast: false
+      matrix:
+        php-version:
+          - '7.4'
+          - '8.0'
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@dynamic-docker
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v2
+        with:
+          version: 9.5.0
+          php_version: ${{ matrix.php-version }}
+          #bootstrap: vendor/autoload.php
+          #configuration: test/phpunit.xml
+          #args: --coverage-text
