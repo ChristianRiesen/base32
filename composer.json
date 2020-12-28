@@ -21,7 +21,7 @@
         "phpunit/phpunit": "^5.0",
         "satooshi/php-coveralls": "^1.0"
     },
-   "autoload": {
+    "autoload": {
         "psr-4": {
             "Base32\\": "src/"
         }
