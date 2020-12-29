@@ -22,7 +22,6 @@ jobs:
         uses: php-actions/composer@v5
         with:
           php_version: 8.0
-          composer_version: 2
       - name: PHPStan
         uses: php-actions/phpstan@v2
         with:
@@ -30,21 +29,27 @@ jobs:
 
   phpunit:
     name: 'PHPUnit'
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.ubuntu-version }}
     strategy:
       # Making sure all versions get tested even if one fails
       fail-fast: false
       matrix:
-        phpunit-version:
-          - '9.5.0'
-        php-version:
-          - '7.3'
-          - '7.4'
-          - '8.0'
         include:
-          - phpunit-version: '8.5.13'
-            php-version: '7.2'
-
+          # 7.2 needs older phpunit version and older ubuntu
+          - php-version: '7.2'
+            phpunit-version: '8.5.13'
+            ubuntu-version: 'ubuntu-18.04'
+          # 7.3 is no longer supported in newer ubuntu
+          - php-version: '7.3'
+            phpunit-version: '9.5.0'
+            ubuntu-version: 'ubuntu-18.04'
+          # 7.4 and 8.0 are supported in both old and new ubuntu, going with newer one only here
+          - php-version: '7.4'
+            phpunit-version: '9.5.0'
+            ubuntu-version: 'ubuntu-20.04'
+          - php-version: '7.4'
+            phpunit-version: '9.5.0'
+            ubuntu-version: 'ubuntu-20.04'
     steps:
       - uses: actions/checkout@v2
       - name: Composer
@@ -57,6 +62,4 @@ jobs:
         with:
           version: ${{ matrix.phpunit-version }}
           php_version: ${{ matrix.php-version }}
-          #bootstrap: vendor/autoload.php
-          #configuration: test/phpunit.xml
           #args: --coverage-text
