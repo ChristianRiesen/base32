@@ -47,7 +47,7 @@ jobs:
           - php-version: '7.4'
             phpunit-version: '9.5.0'
             ubuntu-version: 'ubuntu-20.04'
-          - php-version: '7.4'
+          - php-version: '8.0'
             phpunit-version: '9.5.0'
             ubuntu-version: 'ubuntu-20.04'
     steps:
