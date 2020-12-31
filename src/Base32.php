@@ -14,6 +14,7 @@ namespace Base32;
  * https://github.com/NTICompass/PHP-Base32
  *
  * @author  Christian Riesen <chris.riesen@gmail.com>
+ * @author  Sam Williams <sam@badcow.co>
  *
  * @see     http://christianriesen.com
  *
@@ -31,6 +32,45 @@ class Base32
     private const BASE32_PATTERN = '/[^A-Z2-7]/';
 
     /**
+     * Maps the Base32 pentet to its corresponding bit value.
+     */
+    private const MAPPING = [
+        '=' => 0b00000,
+        'A' => 0b00000,
+        'B' => 0b00001,
+        'C' => 0b00010,
+        'D' => 0b00011,
+        'E' => 0b00100,
+        'F' => 0b00101,
+        'G' => 0b00110,
+        'H' => 0b00111,
+        'I' => 0b01000,
+        'J' => 0b01001,
+        'K' => 0b01010,
+        'L' => 0b01011,
+        'M' => 0b01100,
+        'N' => 0b01101,
+        'O' => 0b01110,
+        'P' => 0b01111,
+        'Q' => 0b10000,
+        'R' => 0b10001,
+        'S' => 0b10010,
+        'T' => 0b10011,
+        'U' => 0b10100,
+        'V' => 0b10101,
+        'W' => 0b10110,
+        'X' => 0b10111,
+        'Y' => 0b11000,
+        'Z' => 0b11001,
+        '2' => 0b11010,
+        '3' => 0b11011,
+        '4' => 0b11100,
+        '5' => 0b11101,
+        '6' => 0b11110,
+        '7' => 0b11111,
+    ];
+
+    /**
      * Encodes into base32.
      *
      * @param string $string Clear text string
@@ -44,39 +84,33 @@ class Base32
             return '';
         }
 
-        // Convert string to binary
-        $binaryString = '';
+        $encoded = '';
 
-        foreach (\str_split($string) as $s) {
-            // Return each character as an 8-bit binary string
-            $binaryString .= \sprintf('%08b', \ord($s));
-        }
+        //Set the initial values
+        $n = $bitLen = $val = 0;
+        $len = strlen($string);
 
-        // Break into 5-bit chunks, then break that into an array
-        $binaryArray = self::chunk($binaryString, 5);
+        //Pad the end of the string - this ensures that there are enough zeros
+        $string .= str_repeat(chr(0), 4);
 
-        // Pad array to be divisible by 8
-        while (0 !== \count($binaryArray) % 8) {
-            $binaryArray[] = null;
-        }
+        //Explode string into integers
+        $chars = unpack('c*', $string, 0);
 
-        $base32String = '';
-
-        // Encode in base32
-        foreach ($binaryArray as $bin) {
-            $char = 32;
-
-            if (null !== $bin) {
-                // Pad the binary strings
-                $bin = \str_pad($bin, 5, '0', STR_PAD_RIGHT);
-                $char = \bindec($bin);
+        while ($n < $len || $bitLen !== 0) {
+            //If the bit length has fallen below 5, shift left 8 and add the next character.
+            if ($bitLen < 5) {
+                $val = $val << 8;
+                $bitLen += 8;
+                $n++;
+                $val += $chars[$n];
             }
-
-            // Base32 character
-            $base32String .= self::ALPHABET[$char];
+            $shift = $bitLen - 5;
+            $encoded .= ($n >= $len && $val == 0) ? '=' : static::ALPHABET[$val >> $shift];
+            $val = $chars[$n] & ((1 << $shift) - 1);
+            $bitLen -= 5;
         }
 
-        return $base32String;
+        return $encoded;
     }
 
     /**
@@ -99,53 +133,34 @@ class Base32
             return '';
         }
 
-        $base32Array = \str_split($base32String);
+        $decoded = '';
 
-        $string = '';
+        //Set the initial values
+        $len = strlen($base32String);
+        $n = 0;
+        $bitLen = 5;
+        $val = self::MAPPING[$base32String[0]];
 
-        foreach ($base32Array as $str) {
-            $char = \strpos(self::ALPHABET, $str);
+        while ($n < $len) {
+            //If the bit length has fallen below 8, shift left 5 and add the next pentet.
+            if ($bitLen < 8) {
+                $val = $val << 5;
+                $bitLen += 5;
+                $n++;
+                $pentet = $base32String[$n] ?? '=';
 
-            // Ignore the padding character
-            if (32 !== $char) {
-                $string .= \sprintf('%05b', $char);
+                //If the new pentet is padding, make this the last iteration.
+                if ('=' === $pentet) $n = $len;
+                $val += self::MAPPING[$pentet];
+                continue;
             }
+            $shift = $bitLen - 8;
+
+            $decoded .= chr($val >> $shift);
+            $val = $val & ((1 << $shift) - 1);
+            $bitLen -= 8;
         }
 
-        while (0 !== \strlen($string) % 8) {
-            $string = \substr($string, 0, -1);
-        }
-
-        $binaryArray = self::chunk($string, 8);
-
-        $realString = '';
-
-        foreach ($binaryArray as $bin) {
-            // Pad each value to 8 bits
-            $bin = \str_pad($bin, 8, '0', STR_PAD_RIGHT);
-            // Convert binary strings to ASCII
-            $realString .= \chr((int) \bindec($bin));
-        }
-
-        return $realString;
-    }
-
-    /**
-     * Creates an array from a binary string into a given chunk size.
-     *
-     * @param string $binaryString String to chunk
-     * @param int    $bits         Number of bits per chunk
-     *
-     * @return array<string>
-     */
-    private static function chunk(string $binaryString, int $bits): array
-    {
-        $binaryString = \chunk_split($binaryString, $bits, ' ');
-
-        if (' ' === \substr($binaryString, \strlen($binaryString) - 1)) {
-            $binaryString = \substr($binaryString, 0, -1);
-        }
-
-        return \explode(' ', $binaryString);
+        return $decoded;
     }
 }
