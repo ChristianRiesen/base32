@@ -88,15 +88,15 @@ class Base32
 
         //Set the initial values
         $n = $bitLen = $val = 0;
-        $len = strlen($string);
+        $len = \strlen($string);
 
         //Pad the end of the string - this ensures that there are enough zeros
-        $string .= str_repeat(chr(0), 4);
+        $string .= \str_repeat(\chr(0), 4);
 
         //Explode string into integers
-        $chars = unpack('c*', $string, 0);
+        $chars = (array) \unpack('c*', $string, 0);
 
-        while ($n < $len || $bitLen !== 0) {
+        while ($n < $len || 0 !== $bitLen) {
             //If the bit length has fallen below 5, shift left 8 and add the next character.
             if ($bitLen < 5) {
                 $val = $val << 8;
@@ -105,8 +105,8 @@ class Base32
                 $val += $chars[$n];
             }
             $shift = $bitLen - 5;
-            $encoded .= ($n >= $len && $val == 0) ? '=' : static::ALPHABET[$val >> $shift];
-            $val = $chars[$n] & ((1 << $shift) - 1);
+            $encoded .= ($n >= $len && 0 == $val) ? '=' : static::ALPHABET[$val >> $shift];
+            $val = $val & ((1 << $shift) - 1);
             $bitLen -= 5;
         }
 
@@ -136,7 +136,7 @@ class Base32
         $decoded = '';
 
         //Set the initial values
-        $len = strlen($base32String);
+        $len = \strlen($base32String);
         $n = 0;
         $bitLen = 5;
         $val = self::MAPPING[$base32String[0]];
@@ -150,13 +150,15 @@ class Base32
                 $pentet = $base32String[$n] ?? '=';
 
                 //If the new pentet is padding, make this the last iteration.
-                if ('=' === $pentet) $n = $len;
+                if ('=' === $pentet) {
+                    $n = $len;
+                }
                 $val += self::MAPPING[$pentet];
                 continue;
             }
             $shift = $bitLen - 8;
 
-            $decoded .= chr($val >> $shift);
+            $decoded .= \chr($val >> $shift);
             $val = $val & ((1 << $shift) - 1);
             $bitLen -= 8;
         }
