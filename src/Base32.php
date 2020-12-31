@@ -27,14 +27,14 @@ class Base32
      *
      * @var array
      */
-    private const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567=';
+    protected const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567=';
 
-    private const BASE32_PATTERN = '/[^A-Z2-7]/';
+    protected const BASE32_PATTERN = '/[^A-Z2-7]/';
 
     /**
      * Maps the Base32 pentet to its corresponding bit value.
      */
-    private const MAPPING = [
+    protected const MAPPING = [
         '=' => 0b00000,
         'A' => 0b00000,
         'B' => 0b00001,
@@ -126,7 +126,7 @@ class Base32
         $base32String = \strtoupper($base32String);
 
         // Remove anything that is not base32 alphabet
-        $base32String = \preg_replace(self::BASE32_PATTERN, '', $base32String);
+        $base32String = \preg_replace(static::BASE32_PATTERN, '', $base32String);
 
         // Empty string results in empty string
         if ('' === $base32String || null === $base32String) {
@@ -139,7 +139,7 @@ class Base32
         $len = \strlen($base32String);
         $n = 0;
         $bitLen = 5;
-        $val = self::MAPPING[$base32String[0]];
+        $val = static::MAPPING[$base32String[0]];
 
         while ($n < $len) {
             //If the bit length has fallen below 8, shift left 5 and add the next pentet.
@@ -153,7 +153,7 @@ class Base32
                 if ('=' === $pentet) {
                     $n = $len;
                 }
-                $val += self::MAPPING[$pentet];
+                $val += static::MAPPING[$pentet];
                 continue;
             }
             $shift = $bitLen - 8;
