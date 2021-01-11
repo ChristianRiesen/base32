@@ -34,6 +34,7 @@ class Base32HexTest extends TestCase
         $encodeData = [
             'Empty String' => ['', ''],
             'All Invalid Characters' => ['', 'WXYXWXYZWXYZWXYZ'],
+            'Random Integers' => [\base64_decode('HgxBl1kJ4souh+ELRIHm/x8yTc/cgjDmiCNyJR/NJfs='), '3O6435QP17HCKBK7S45K90F6VSFJ4JEFRI131PK84DP2A7UD4NTG===='],
         ];
 
         return \array_merge($encodeData, self::RFC_VECTORS);
@@ -46,6 +47,7 @@ class Base32HexTest extends TestCase
     {
         $encodeData = [
             'Empty String' => ['', ''],
+            'Random Integers' => [\base64_decode('HgxBl1kJ4souh+ELRIHm/x8yTc/cgjDmiCNyJR/NJfs='), '3O6435QP17HCKBK7S45K90F6VSFJ4JEFRI131PK84DP2A7UD4NTG===='],
         ];
 
         return \array_merge($encodeData, self::RFC_VECTORS);

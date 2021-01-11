@@ -94,7 +94,7 @@ class Base32
         $string .= \str_repeat(\chr(0), 4);
 
         //Explode string into integers
-        $chars = (array) \unpack('c*', $string, 0);
+        $chars = (array) \unpack('C*', $string, 0);
 
         while ($n < $len || 0 !== $bitLen) {
             //If the bit length has fallen below 5, shift left 8 and add the next character.
