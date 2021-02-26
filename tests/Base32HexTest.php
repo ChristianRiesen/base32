@@ -54,6 +54,16 @@ class Base32HexTest extends TestCase
     }
 
     /**
+     * Back and forth encoding must return the same result.
+     *
+     * @return array<string, array>
+     */
+    public function backAndForthDataProvider(): array
+    {
+        return Base32Test::BASE_CLEAR_STRINGS;
+    }
+
+    /**
      * @dataProvider decodeDataProvider
      * @covers ::decode
      */
@@ -69,5 +79,16 @@ class Base32HexTest extends TestCase
     public function testEncode(string $clear, string $base32): void
     {
         $this->assertEquals($base32, Base32Hex::encode($clear));
+    }
+
+    /**
+     * @dataProvider backAndForthDataProvider
+     * @covers ::encode
+     * @covers ::decode
+     */
+    public function testEncodeAndDecode(string $clear): void
+    {
+        // Encoding then decoding again, to ensure that the back and forth works as intended
+        $this->assertEquals($clear, Base32Hex::decode(Base32Hex::encode($clear)));
     }
 }

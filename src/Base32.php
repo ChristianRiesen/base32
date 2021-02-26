@@ -25,14 +25,14 @@ class Base32
     /**
      * Alphabet for encoding and decoding base32.
      *
-     * @var array
+     * @var string
      */
     protected const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567=';
 
-    protected const BASE32_PATTERN = '/[^A-Z2-7]/';
+    protected const BASE32HEX_PATTERN = '/[^A-Z2-7]/';
 
     /**
-     * Maps the Base32 pentet to its corresponding bit value.
+     * Maps the Base32 character to its corresponding bit value.
      */
     protected const MAPPING = [
         '=' => 0b00000,
@@ -126,7 +126,7 @@ class Base32
         $base32String = \strtoupper($base32String);
 
         // Remove anything that is not base32 alphabet
-        $base32String = \preg_replace(static::BASE32_PATTERN, '', $base32String);
+        $base32String = \preg_replace(static::BASE32HEX_PATTERN, '', $base32String);
 
         // Empty string results in empty string
         if ('' === $base32String || null === $base32String) {
