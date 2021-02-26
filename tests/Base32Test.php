@@ -13,6 +13,22 @@ use PHPUnit\Framework\TestCase;
 class Base32Test extends TestCase
 {
     /**
+     * Strings to test back and forth encoding/decoding to make sure results are the same.
+     *
+     * @var array<string,string>
+     */
+    public const BASE_CLEAR_STRINGS = [
+        'Empty String' => [''],
+        'Ten' => ['10'],
+        'Test130' => ['test130'],
+        'test' => ['test'],
+        'Eight' => ['8'],
+        'Zero' => ['0'],
+        'Equals' => ['='],
+        'Foobar' => ['foobar'],
+    ];
+
+    /**
      * Vectors from RFC with cleartext => base32 pairs.
      *
      * @var array<string,string>
@@ -35,7 +51,7 @@ class Base32Test extends TestCase
             'Empty String' => ['', ''],
             'All Invalid Characters' => ['', '8908908908908908'],
             'Random Integers' => [\base64_decode('HgxBl1kJ4souh+ELRIHm/x8yTc/cgjDmiCNyJR/NJfs='), 'DYGEDF2ZBHRMULUH4EFUJAPG74PTETOP3SBDBZUIENZCKH6NEX5Q===='],
-            'Partial zero edge case' => ["8", "HA======"],
+            'Partial zero edge case' => ['8', 'HA======'],
         ];
 
         return \array_merge($encodeData, self::RFC_VECTORS);
@@ -49,10 +65,20 @@ class Base32Test extends TestCase
         $encodeData = [
             'Empty String' => ['', ''],
             'Random Integers' => [\base64_decode('HgxBl1kJ4souh+ELRIHm/x8yTc/cgjDmiCNyJR/NJfs='), 'DYGEDF2ZBHRMULUH4EFUJAPG74PTETOP3SBDBZUIENZCKH6NEX5Q===='],
-            'Partial zero edge case' => ["8", "HA======"],
+            'Partial zero edge case' => ['8', 'HA======'],
         ];
 
         return \array_merge($encodeData, self::RFC_VECTORS);
+    }
+
+    /**
+     * Back and forth encoding must return the same result.
+     *
+     * @return array<string, array>
+     */
+    public function backAndForthDataProvider(): array
+    {
+        return self::BASE_CLEAR_STRINGS;
     }
 
     /**
@@ -71,5 +97,16 @@ class Base32Test extends TestCase
     public function testEncode(string $clear, string $base32): void
     {
         $this->assertEquals($base32, Base32::encode($clear));
+    }
+
+    /**
+     * @dataProvider backAndForthDataProvider
+     * @covers ::encode
+     * @covers ::decode
+     */
+    public function testEncodeAndDecode(string $clear): void
+    {
+        // Encoding then decoding again, to ensure that the back and forth works as intended
+        $this->assertEquals($clear, Base32::decode(Base32::encode($clear)));
     }
 }

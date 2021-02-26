@@ -21,14 +21,14 @@ class Base32Hex extends Base32
     /**
      * Alphabet for encoding and decoding base32 extended hex.
      *
-     * @var array
+     * @var string
      */
     protected const ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUV=';
 
-    protected const BASE32_PATTERN = '/[^0-9A-V]/';
+    protected const BASE32HEX_PATTERN = '/[^0-9A-V]/';
 
     /**
-     * Maps the Base32 pentet to its corresponding bit value.
+     * Maps the Base32 character to its corresponding bit value.
      */
     protected const MAPPING = [
         '=' => 0b00000,
