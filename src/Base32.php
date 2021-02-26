@@ -105,7 +105,7 @@ class Base32
                 $val += $chars[$n];
             }
             $shift = $bitLen - 5;
-            $encoded .= ($n >= $len && 0 == $val) ? '=' : static::ALPHABET[$val >> $shift];
+            $encoded .= ($n - (int)($bitLen > 8) > $len && 0 == $val) ? '=' : static::ALPHABET[$val >> $shift];
             $val = $val & ((1 << $shift) - 1);
             $bitLen -= 5;
         }
