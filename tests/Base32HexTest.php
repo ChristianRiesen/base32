@@ -15,7 +15,7 @@ class Base32HexTest extends TestCase
     /**
      * Vectors from RFC with cleartext => base32 pairs.
      *
-     * @var array<string,string>
+     * @var array<mixed>
      */
     private const RFC_VECTORS = [
         'RFC Vector 1' => ['f', 'CO======'],
@@ -27,7 +27,7 @@ class Base32HexTest extends TestCase
     ];
 
     /**
-     * @return array<string, array>
+     * @return array<string, array<int, string>>
      */
     public function decodeDataProvider(): array
     {
@@ -41,7 +41,7 @@ class Base32HexTest extends TestCase
     }
 
     /**
-     * @return array<string, array>
+     * @return array<string, array<int, string>>
      */
     public function encodeDataProvider(): array
     {
@@ -56,7 +56,7 @@ class Base32HexTest extends TestCase
     /**
      * Back and forth encoding must return the same result.
      *
-     * @return array<string, array>
+     * @return array<string, array<string>>
      */
     public function backAndForthDataProvider(): array
     {
@@ -69,7 +69,7 @@ class Base32HexTest extends TestCase
      */
     public function testDecode(string $clear, string $base32): void
     {
-        $this->assertEquals($clear, Base32Hex::decode($base32));
+        $this->assertSame($clear, Base32Hex::decode($base32));
     }
 
     /**
@@ -78,7 +78,7 @@ class Base32HexTest extends TestCase
      */
     public function testEncode(string $clear, string $base32): void
     {
-        $this->assertEquals($base32, Base32Hex::encode($clear));
+        $this->assertSame($base32, Base32Hex::encode($clear));
     }
 
     /**
@@ -89,6 +89,6 @@ class Base32HexTest extends TestCase
     public function testEncodeAndDecode(string $clear): void
     {
         // Encoding then decoding again, to ensure that the back and forth works as intended
-        $this->assertEquals($clear, Base32Hex::decode(Base32Hex::encode($clear)));
+        $this->assertSame($clear, Base32Hex::decode(Base32Hex::encode($clear)));
     }
 }
