@@ -15,7 +15,7 @@ class Base32Test extends TestCase
     /**
      * Strings to test back and forth encoding/decoding to make sure results are the same.
      *
-     * @var array<string,string>
+     * @var array<string, array<string>>
      */
     public const BASE_CLEAR_STRINGS = [
         'Empty String' => [''],
@@ -31,7 +31,7 @@ class Base32Test extends TestCase
     /**
      * Vectors from RFC with cleartext => base32 pairs.
      *
-     * @var array<string,string>
+     * @var array<mixed>
      */
     private const RFC_VECTORS = [
         'RFC Vector 1' => ['f', 'MY======'],
@@ -43,7 +43,7 @@ class Base32Test extends TestCase
     ];
 
     /**
-     * @return array<string, array>
+     * @return array<string, array<int, string>>
      */
     public function decodeDataProvider(): array
     {
@@ -58,7 +58,7 @@ class Base32Test extends TestCase
     }
 
     /**
-     * @return array<string, array>
+     * @return array<string, array<int, string>>
      */
     public function encodeDataProvider(): array
     {
@@ -74,7 +74,7 @@ class Base32Test extends TestCase
     /**
      * Back and forth encoding must return the same result.
      *
-     * @return array<string, array>
+     * @return array<string, array<string>>
      */
     public function backAndForthDataProvider(): array
     {
@@ -87,7 +87,7 @@ class Base32Test extends TestCase
      */
     public function testDecode(string $clear, string $base32): void
     {
-        $this->assertEquals($clear, Base32::decode($base32));
+        $this->assertSame($clear, Base32::decode($base32));
     }
 
     /**
@@ -96,7 +96,7 @@ class Base32Test extends TestCase
      */
     public function testEncode(string $clear, string $base32): void
     {
-        $this->assertEquals($base32, Base32::encode($clear));
+        $this->assertSame($base32, Base32::encode($clear));
     }
 
     /**
@@ -107,6 +107,6 @@ class Base32Test extends TestCase
     public function testEncodeAndDecode(string $clear): void
     {
         // Encoding then decoding again, to ensure that the back and forth works as intended
-        $this->assertEquals($clear, Base32::decode(Base32::encode($clear)));
+        $this->assertSame($clear, Base32::decode(Base32::encode($clear)));
     }
 }
