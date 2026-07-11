@@ -15,7 +15,7 @@ class Base32HexTest extends TestCase
     /**
      * Vectors from RFC with cleartext => base32 pairs.
      *
-     * @var array<string,string>
+     * @var array<string, array<int, string>>
      */
     private const RFC_VECTORS = [
         'RFC Vector 1' => ['f', 'CO======'],
@@ -27,9 +27,9 @@ class Base32HexTest extends TestCase
     ];
 
     /**
-     * @return array<string, array>
+     * @return array<string, array<int, string>>
      */
-    public function decodeDataProvider(): array
+    public static function decodeDataProvider(): array
     {
         $encodeData = [
             'Empty String' => ['', ''],
@@ -42,9 +42,9 @@ class Base32HexTest extends TestCase
     /**
      * Inputs that a strict RFC 4648 decoder must reject.
      *
-     * @return array<string, array>
+     * @return array<string, array<int, string>>
      */
-    public function invalidDecodeDataProvider(): array
+    public static function invalidDecodeDataProvider(): array
     {
         return [
             'Character outside alphabet' => ['WXYXWXYZWXYZWXYZ'],
@@ -57,9 +57,9 @@ class Base32HexTest extends TestCase
     }
 
     /**
-     * @return array<string, array>
+     * @return array<string, array<int, string>>
      */
-    public function encodeDataProvider(): array
+    public static function encodeDataProvider(): array
     {
         $encodeData = [
             'Empty String' => ['', ''],
@@ -72,9 +72,9 @@ class Base32HexTest extends TestCase
     /**
      * Back and forth encoding must return the same result.
      *
-     * @return array<string, array>
+     * @return array<string, array<int, string>>
      */
-    public function backAndForthDataProvider(): array
+    public static function backAndForthDataProvider(): array
     {
         return Base32Test::BASE_CLEAR_STRINGS;
     }
@@ -83,15 +83,15 @@ class Base32HexTest extends TestCase
      * Deterministic inputs of every length from 0 to 10 bytes, exercising all
      * five padding cases and the multi-block path.
      *
-     * @return array<string, array>
+     * @return array<string, array<int, string>>
      */
-    public function roundTripLengthProvider(): array
+    public static function roundTripLengthProvider(): array
     {
         $cases = [];
         $data = '';
 
         for ($i = 0; $i <= 10; $i++) {
-            $cases['length ' . $i] = [$data];
+            $cases['length '.$i] = [$data];
             $data .= \chr(($i * 37 + 11) % 256);
         }
 

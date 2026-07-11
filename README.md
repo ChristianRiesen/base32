@@ -71,9 +71,12 @@ Have a RFC compliant Base32 encoder and decoder. The implementation could be imp
 Requirements
 ------------
 
-Works on PHP 7.2 and later, including PHP 8.0.
+Works on PHP 8.1 and later (PHP 8.1, 8.2, 8.3 and 8.4 are tested in CI).
 
-Tests run on PHPUnit 9.5, with PHP 7.3 and later. For PHP 7.2, tests use an older PHPUnit version.
+The 1.x releases support PHP 7.2 – 8.x; use those if you need to run on an
+older PHP version.
+
+Tests run on PHPUnit 10.5.
 
 Author
 ------

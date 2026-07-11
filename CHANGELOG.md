@@ -2,6 +2,11 @@
 
 ## 2.0.0 (unreleased)
 
+### Backward-incompatible: PHP 8.1+ required
+
+The minimum supported PHP version is now 8.1. If you need to run on PHP
+7.2 – 8.0, stay on the 1.x release line.
+
 ### Backward-incompatible: strict, RFC 4648-conformant decoding
 
 `Base32::decode()` and `Base32Hex::decode()` now **reject** malformed input
