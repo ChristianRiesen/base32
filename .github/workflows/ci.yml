@@ -7,14 +7,14 @@ jobs:
     name: PHP-CS-Fixer
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           coverage: none
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
       - name: PHP-CS-Fixer
         run: vendor/bin/php-cs-fixer fix --diff --dry-run
 
@@ -22,14 +22,14 @@ jobs:
     name: PHPStan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           coverage: none
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
       - name: PHPStan
         run: vendor/bin/phpstan analyse --no-progress
 
@@ -42,13 +42,13 @@ jobs:
       matrix:
         php-version: ['8.1', '8.2', '8.3', '8.4']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
           coverage: none
       - name: Install dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
       - name: PHPUnit Tests
         run: vendor/bin/phpunit
