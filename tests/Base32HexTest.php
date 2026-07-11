@@ -80,6 +80,38 @@ class Base32HexTest extends TestCase
     }
 
     /**
+     * Deterministic inputs of every length from 0 to 10 bytes, exercising all
+     * five padding cases and the multi-block path.
+     *
+     * @return array<string, array>
+     */
+    public function roundTripLengthProvider(): array
+    {
+        $cases = [];
+        $data = '';
+
+        for ($i = 0; $i <= 10; $i++) {
+            $cases['length ' . $i] = [$data];
+            $data .= \chr(($i * 37 + 11) % 256);
+        }
+
+        return $cases;
+    }
+
+    /**
+     * Anything the (conformant) encoder produces must decode back without the
+     * strict decoder rejecting it.
+     *
+     * @dataProvider roundTripLengthProvider
+     * @covers ::decode
+     * @covers ::encode
+     */
+    public function testRoundTripAcrossLengths(string $clear): void
+    {
+        $this->assertSame($clear, Base32Hex::decode(Base32Hex::encode($clear)));
+    }
+
+    /**
      * @dataProvider decodeDataProvider
      * @covers ::decode
      */
