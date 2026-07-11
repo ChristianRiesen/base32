@@ -49,12 +49,30 @@ class Base32Test extends TestCase
     {
         $encodeData = [
             'Empty String' => ['', ''],
-            'All Invalid Characters' => ['', '8908908908908908'],
             'Random Integers' => [\base64_decode('HgxBl1kJ4souh+ELRIHm/x8yTc/cgjDmiCNyJR/NJfs='), 'DYGEDF2ZBHRMULUH4EFUJAPG74PTETOP3SBDBZUIENZCKH6NEX5Q===='],
             'Partial zero edge case' => ['8', 'HA======'],
         ];
 
         return \array_merge($encodeData, self::RFC_VECTORS);
+    }
+
+    /**
+     * Inputs that a strict RFC 4648 decoder must reject.
+     *
+     * @return array<string, array>
+     */
+    public function invalidDecodeDataProvider(): array
+    {
+        return [
+            'Character outside alphabet' => ['8908908908908908'],
+            'Lowercase is not canonical' => ['my======'],
+            'Length not a multiple of 8' => ['MZXW6YQ'],
+            'Too short with stray padding' => ['MY====='],
+            'Invalid padding count' => ['MYA====='],
+            'Padding count of two' => ['MY==MY=='],
+            'Stray padding before data' => ['=MYMYMYM'],
+            'Non-zero trailing bits' => ['MZ======'],
+        ];
     }
 
     /**
@@ -88,6 +106,17 @@ class Base32Test extends TestCase
     public function testDecode(string $clear, string $base32): void
     {
         $this->assertEquals($clear, Base32::decode($base32));
+    }
+
+    /**
+     * @dataProvider invalidDecodeDataProvider
+     * @covers ::decode
+     */
+    public function testDecodeRejectsInvalidInput(string $base32): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        Base32::decode($base32);
     }
 
     /**

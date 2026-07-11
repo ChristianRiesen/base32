@@ -37,6 +37,28 @@ $decoded = Base32::decode($encoded);
 
 You can also use the extended hex alphabet by using the `Base32Hex` class instead.
 
+Strict decoding (2.0)
+---------------------
+
+As of 2.0, `decode()` is strictly [RFC 4648](https://tools.ietf.org/html/rfc4648)
+conformant and **rejects** malformed input by throwing an
+`\InvalidArgumentException`, instead of silently stripping unknown characters as
+1.x did. Decoding is case-sensitive and requires correct padding. It throws when
+the input is not uppercase, has a length that is not a multiple of 8, contains
+characters outside the alphabet or misplaced padding, or carries non-zero
+trailing bits (a non-canonical encoding).
+
+`encode()` is unchanged and remains conformant, so anything produced by
+`encode()` still decodes cleanly. If you decode user-supplied strings (e.g. TOTP
+secrets that may be lowercase or spaced), normalize them first:
+
+```php
+$secret = strtoupper(preg_replace('/\s+/', '', $userInput));
+$bytes  = Base32::decode($secret);
+```
+
+See [CHANGELOG.md](CHANGELOG.md) for the full 2.0 migration notes.
+
 About
 =====
 
