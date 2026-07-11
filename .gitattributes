@@ -2,7 +2,6 @@
 .github/ export-ignore
 .gitignore export-ignore
 .php_cs.dist export-ignore
-composer.json export-ignore
 phpstan.neon export-ignore
 phpunit.xml.dist export-ignore
 tests/ export-ignore
